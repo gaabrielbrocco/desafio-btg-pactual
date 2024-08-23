@@ -7,6 +7,7 @@ import desafio.btg_pactual.entity.OrderItem;
 import desafio.btg_pactual.listener.dto.OrderCreatedEvent;
 import desafio.btg_pactual.repository.OrderRepository;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,15 +22,18 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 @Service
 public class OrderService {
 
-    private final OrderRepository orderRepository;
-    private final MongoTemplate mongoTemplate;
-    private final MongoClient mongo;
+    @Autowired
+    private  OrderRepository orderRepository;
+    @Autowired
+    private  MongoTemplate mongoTemplate;
+    @Autowired
+    private  MongoClient mongo;
 
-    public OrderService(OrderRepository orderRepository, MongoTemplate mongoTemplate, MongoClient mongo) {
-        this.orderRepository = orderRepository;
-        this.mongoTemplate = mongoTemplate;
-        this.mongo = mongo;
-    }
+//    public OrderService(OrderRepository orderRepository, MongoTemplate mongoTemplate, MongoClient mongo) {
+//        this.orderRepository = orderRepository;
+//        this.mongoTemplate = mongoTemplate;
+//        this.mongo = mongo;
+//    }
 
     // Salva um pedido no banco de dados a partir de um OrderCreatedEvent
     public void save(OrderCreatedEvent event) {
@@ -74,6 +78,7 @@ public class OrderService {
     private static List<OrderItem> getOrderItems(OrderCreatedEvent event) {
         return event.itens().stream().map(i -> new OrderItem(i.produto(), i.quantidade(), i.preco())).toList();
     }
+
 
 
 }

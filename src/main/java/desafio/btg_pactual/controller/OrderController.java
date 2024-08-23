@@ -3,7 +3,9 @@ package desafio.btg_pactual.controller;
 import desafio.btg_pactual.controller.dto.ApiResponse;
 import desafio.btg_pactual.controller.dto.OrderResponse;
 import desafio.btg_pactual.controller.dto.PaginationResponse;
+import desafio.btg_pactual.controller.dto.SummaryResponse;
 import desafio.btg_pactual.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +19,12 @@ import java.util.Map;
 public class OrderController {
 
         // Serviço que contém a lógica de negócios relacionada aos pedidos.
-    private final OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-        public OrderController(OrderService orderService) {
-            this.orderService = orderService;
-        }
+//        public OrderController(OrderService orderService) {
+//            this.orderService = orderService;
+//        }
 
         @GetMapping("/customers/{customerId}/orders")
         // Lista paginada de pedidos do cliente, incluindo informações de paginação.
@@ -38,4 +41,14 @@ public class OrderController {
                     PaginationResponse.fromPage(pageResponse)
             ));
         }
+
+        @GetMapping("/customers/{customerId}/orders/summary")
+
+        public ResponseEntity<SummaryResponse> listSummary(@PathVariable("customerId") Long customerId) {
+            var summary = orderService.findTotalOrdersByCustomerId(customerId);
+
+            return ResponseEntity.ok(new SummaryResponse(Map.of("totalOnOrders", summary)));
+
+        }
+
     }

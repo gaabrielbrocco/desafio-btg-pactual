@@ -1,6 +1,5 @@
 package desafio.btg_pactual.repository;
 
-import desafio.btg_pactual.controller.dto.OrderResponse;
 import desafio.btg_pactual.entity.OrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
